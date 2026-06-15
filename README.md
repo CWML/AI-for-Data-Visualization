@@ -16,9 +16,7 @@ This training will be hands-on; come ready to code alongside the instructor. It 
 
 The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` jupyter notebook file. This file can be viewed in GitHub or your preferred jupyter notebook environment. [colab.research.google.com](https://colab.research.google.com) is utilized in the class.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CWML/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_workshop.ipynb)
-
-> **Note:** update the Colab link above once the repository is pushed (it currently assumes `CWML/AI-for-Data-Visualization` on the `main` branch).
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_workshop.ipynb)
 
 ### Data
 
