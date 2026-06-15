@@ -1,17 +1,18 @@
 ## AI for Data Visualization
-Now that you can write a bit of Python and make a basic plot, how do you turn a rough chart into a clear, professional figure — and how can AI tools help you get there faster? In this hands-on workshop you'll learn the core principles of good data visualization and practice using an AI assistant (such as Claude, ChatGPT, or GitHub Copilot) to draft, debug, and polish figures for presentations and reports. This session builds directly on **Python 1**: bring your beginner Python, pandas, and matplotlib/seaborn skills.
+A hands-on **sequel to Python 1**. There you learned to write a little Python and make a basic plot — here you level up to **seaborn**, the modern library that turns a pandas DataFrame into a good-looking statistical figure in one line, and you use **Gemini (built into Google Colab)** to draft those plots from plain English and make rough ones better. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
 
 ### In this 90-minute in-person session, you'll learn how to:
 
-- Apply five core visualization principles (chart choice, reducing clutter, intentional color, labeling, and avoiding misleading charts)
-- Use an AI assistant to draft a plot from a plain-language description of your data and goal
-- Write effective prompts for visualization (data shape → goal → constraints → library)
-- Turn a rough AI-generated draft into a polished, presentation-ready figure (themes, colorblind-safe palettes, takeaway titles, annotations, high-resolution export)
+- Use **seaborn** for the three families of plots — relational (`scatterplot`, `lineplot`), distribution (`histplot`, `boxplot`), and categorical (`barplot`, `countplot`)
+- Layer multiple variables into one figure with **semantic mappings** (`hue`, `size`, `style`, `col`)
+- Apply five core visualization principles (chart choice, reducing clutter, intentional color, labeling, avoiding misleading charts)
+- Use **Gemini in Colab** to draft a plot from a plain-language description and to make a rough plot presentation-ready
+- Write effective visualization prompts (dataset & columns → goal → constraints → chart type)
 - Recognize and catch the common failure modes of AI-generated charts (hallucinated functions, wrong chart types, misleading scales, altered data)
 
 ### What to know about this session:
 
-This training will be hands-on; come ready to code alongside the instructor. It assumes you have completed **Python 1** or are comfortable with basic Python, `pandas`, and `matplotlib`/`seaborn`. Details about technical setup will be emailed to registrants a few days before the course begins. Please note that registration is required for this event.
+This training will be hands-on; come ready to code alongside the instructor. It assumes you have completed **Python 1** or are comfortable with basic Python, `pandas`, and `matplotlib`. We use **Google Colab** (which has Gemini built in — no separate AI account or API key needed). Details about technical setup will be emailed to registrants a few days before the course begins. Please note that registration is required for this event.
 
 The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` jupyter notebook file. This file can be viewed in GitHub or your preferred jupyter notebook environment. [colab.research.google.com](https://colab.research.google.com) is utilized in the class.
 
@@ -19,20 +20,25 @@ The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` jupyter 
 
 > **Note:** update the Colab link above once the repository is pushed (it currently assumes `CWML/AI-for-Data-Visualization` on the `main` branch).
 
-### Source material
+### Data
 
-The `examples/art-of-dataviz-course/` folder contains plots and write-ups adapted from the *Art of Data Visualization* course (sales over time by category, sales by product type and gender, income vs. test scores by school type, and a pairwise-relationship matrix). We use these as real "before" cases to critique and rebuild with AI assistance during the workshop. More sources may be added over time.
+All workshop data comes from seaborn's built-in datasets via `sns.load_dataset(...)` — **penguins** (the main one), **tips**, **flights**, and **titanic**. Nothing to download or upload.
+
+### Bonus reference material
+
+The `examples/art-of-dataviz-course/` folder contains extra plots and write-ups adapted from the *Art of Data Visualization* course. They aren't used in the live session but are kept as additional examples of interpreting visualizations.
 
 ### Where to go from here (after class)
 
 These skills carry directly into later Python and machine-learning courses, where clear figures (loss curves, confusion matrices, feature distributions) matter just as much.
 
-- Matplotlib quick start: https://matplotlib.org/stable/users/explain/quick_start.html
 - Seaborn tutorial: https://seaborn.pydata.org/tutorial.html
+- Seaborn example gallery: https://seaborn.pydata.org/examples/index.html
+- Matplotlib quick start: https://matplotlib.org/stable/users/explain/quick_start.html
 - Pandas 10-minute intro: https://pandas.pydata.org/docs/user_guide/10min.html
 - Data-to-Viz (how to choose a chart): https://www.data-to-viz.com/
 - ColorBrewer (colorblind-safe palettes): https://colorbrewer2.org/
-- Claude: https://claude.ai · ChatGPT: https://chat.openai.com · GitHub Copilot: https://github.com/features/copilot
+- Gemini in Colab (data science help): https://colab.research.google.com/
 
 ### Prerequisite
 

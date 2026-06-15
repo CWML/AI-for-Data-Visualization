@@ -1,5 +1,5 @@
-"""Builds ai_dataviz_2026_workshop.ipynb. Run once, then delete if you like."""
-import json, nbformat as nbf
+"""Builds ai_dataviz_2026_workshop.ipynb. Run once, then re-run to regenerate."""
+import nbformat as nbf
 
 nb = nbf.v4.new_notebook()
 cells = []
@@ -9,212 +9,252 @@ def code(t): cells.append(nbf.v4.new_code_cell(t))
 md("""# AI for Data Visualization Workshop
 **BDSY 2026 · Friday, June 26, 2026 · 10:45 AM – 12:15 PM**
 
-Welcome! This notebook is the hands-on portion of the session. You'll build on
-your **Python 1** skills (Python, `pandas`, `matplotlib`/`seaborn`) and practice
-using an AI assistant to draft, debug, and polish figures.
+Welcome back! This is a hands-on **sequel to Python 1**. There you learned to
+write a little Python and make a basic `matplotlib` plot. Today we level up:
 
-**The rule for today: _AI drafts, you direct._** AI is great at writing plotting
-code; *you* decide whether the figure is honest and makes the point.
+- We'll use **seaborn**, the modern library that makes good-looking statistical
+  plots from a pandas DataFrame in *one line*.
+- We'll use the data that ships **inside seaborn** — no files to upload.
+- And we'll use **Gemini, built into Google Colab**, to draft plots from plain
+  English and to make rough plots better.
 
-Run the setup cell below first.""")
+> **The rule for today: _AI drafts, you direct._** Gemini writes the code fast;
+> *you* decide whether the figure is clear, honest, and makes the point.
+
+Run the setup cell next.""")
 
 md("## ⚙️ Setup — run this cell first")
 code('''# ===== SETUP — run this cell first! =====
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.pyplot as plt
 
-np.random.seed(42)
+# One line that makes EVERY plot look professional:
+sns.set_theme(style="whitegrid", context="talk")
 
-# ---- Recreate the datasets from the "Art of Data Visualization" course ----
+# seaborn ships with clean datasets — no files needed:
+penguins = sns.load_dataset("penguins").dropna()
+tips     = sns.load_dataset("tips")
+flights  = sns.load_dataset("flights")
+titanic  = sns.load_dataset("titanic")
 
-# 1) Monthly sales by product category (6 months)
-months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-sales_over_time = pd.DataFrame({
-    "month": months * 3,
-    "category": (["Electronics"] * 6) + (["Furniture"] * 6) + (["Clothing"] * 6),
-    "sales": np.concatenate([
-        np.random.normal(500, 30, 6),   # Electronics highest
-        np.random.normal(300, 25, 6),   # Furniture middle
-        np.random.normal(150, 20, 6),   # Clothing lowest
-    ]).round(0),
-})
+print("Datasets loaded:")
+for name, df in [("penguins", penguins), ("tips", tips),
+                 ("flights", flights), ("titanic", titanic)]:
+    print(f"  {name:9s} {df.shape}  ->  {list(df.columns)}")
 
-# 2) Number of sales by product type and gender
-n = 600
-product_gender = pd.DataFrame({
-    "product": np.random.choice(["Phone", "Laptop", "Tablet"], n, p=[0.5, 0.3, 0.2]),
-    "gender": np.random.choice(["Male", "Female"], n),
-})
+penguins.head()''')
 
-# 3) Income vs. test score, by school type, with hours studied
-m = 300
-school = np.random.choice(["A", "B", "C"], m)
-income = np.random.uniform(20, 120, m)             # thousands
-hours = (income / 20 + np.random.normal(0, 1, m)).clip(0, 12)
-base = {"A": 50, "B": 75, "C": 62}
-score = np.array([base[s] for s in school]) + 0.15 * income + 1.2 * hours \
-        + np.random.normal(0, 4, m)
-students = pd.DataFrame({"school_type": school, "income": income.round(1),
-                         "hours_studied": hours.round(1), "test_score": score.round(1)})
-
-# 4) Four variables with a known correlation structure (Task 8)
-k = 250
-X1 = np.random.normal(0, 1, k)
-X2 = np.random.normal(0, 1, k)                      # independent
-X3 = 0.9 * X1 + np.random.normal(0, 0.3, k)        # strong + with X1
-X4 = -0.5 * X1 + np.random.normal(0, 0.7, k)       # moderate - with X1
-relationships = pd.DataFrame({"X1": X1, "X2": X2, "X3": X3, "X4": X4})
-
-print("Datasets ready:")
-for name, dfv in [("sales_over_time", sales_over_time), ("product_gender", product_gender),
-                  ("students", students), ("relationships", relationships)]:
-    print(f"  {name:18s} {dfv.shape}")
-sales_over_time.head()''')
-
-# ---------------- PART 1 ----------------
+# ---------------- WHY SEABORN ----------------
 md("""---
-# Part 1 — Five principles that decide if a figure works (~20 min)
+# 1. Why seaborn? (~10 min)
 
-We'll anchor each principle on a real plot from the course data. As we go, ask:
-*does this figure answer the question clearly?*
+Think of it this way: **matplotlib is the engine; seaborn is the smart layer on
+top.** Seaborn talks to pandas DataFrames directly, does the statistics for you,
+and looks good by default. It still *returns* matplotlib objects, so everything
+from Python 1 (`plt.title`, `figsize`, `plt.savefig`) still works.
 
-1. **Pick the encoding that matches the question.**
-2. **Reduce non-data ink** (clutter, heavy gridlines, 3D).
-3. **Use color with intent** (categorical vs. sequential; colorblind-safe).
-4. **Label so the figure stands alone** (takeaway title, units, annotation).
-5. **Don't mislead** (truncated axes, dual axes, area traps).""")
-
-md("**Principle 1 — match the encoding to the question.** *How do sales change over time, by category?* Time → a line chart shows trend and keeps categories comparable.")
-code('''fig, ax = plt.subplots(figsize=(7, 4))
-for cat, g in sales_over_time.groupby("category"):
-    ax.plot(g["month"], g["sales"], marker="o", label=cat)
-ax.set_title("Sales over time by category")
-ax.legend()
+The "aha": this single line **groups by day, averages the bill, AND draws error
+bars** — work that took many lines in Python 1.""")
+code('''sns.barplot(data=tips, x="day", y="total_bill")
+plt.title("Average bill by day")
 plt.show()''')
 
-md("""**Principle 5 — don't mislead.** The same data with a *truncated y-axis* exaggerates differences. Run both and compare what your eye concludes.""")
-code('''fig, axes = plt.subplots(1, 2, figsize=(11, 4))
-piv = sales_over_time.pivot(index="month", columns="category", values="sales").loc[months]
-piv.plot(ax=axes[0], marker="o");  axes[0].set_title("Honest: y starts at 0")
-axes[0].set_ylim(0, None)
-piv.plot(ax=axes[1], marker="o");  axes[1].set_title("Misleading: zoomed y-axis")
-axes[1].set_ylim(120, 540)
-plt.tight_layout(); plt.show()''')
+md("""**You write the *what*, not the *how*.** You name the DataFrame and which
+columns go on x and y — seaborn handles the rest.""")
 
-md("""> 🗣️ **Discuss:** Which of the five principles does each plot above follow or break?
-> Look at `examples/art-of-dataviz-course/` for the original course figures and their written interpretations.""")
-
-# ---------------- PART 2 ----------------
+# ---------------- THREE FAMILIES ----------------
 md("""---
-# Part 2 — Hands-on: let AI draft a plot (~25 min)
+# 2. The three families of plots (~20 min)
 
-You don't have to remember every matplotlib argument. Describe what you want and
-let the AI write a first draft — then you fix and direct it.
+Almost every seaborn plot belongs to one of three families, each answering a
+different kind of question:
+
+| Your question | Family | Functions |
+|---|---|---|
+| "How do two **numbers** relate?" | **Relational** | `scatterplot`, `lineplot` |
+| "What's the **shape/spread** of a number?" | **Distribution** | `histplot`, `boxplot` |
+| "How does a number **compare across categories**?" | **Categorical** | `barplot`, `countplot` |
+
+Pick the family that matches your question — that's visualization principle #1.""")
+
+md("### Relational — `scatterplot`: how do two numbers relate?")
+code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="flipper_length_mm")
+plt.title("Bill length vs. flipper length")
+plt.show()''')
+
+md("### Relational — `lineplot`: a trend over time (flights data)")
+code('''sns.lineplot(data=flights, x="year", y="passengers")
+plt.title("Air passengers over time")
+plt.show()''')
+
+md("### Distribution — `histplot`: the shape/spread of one number")
+code('''sns.histplot(data=penguins, x="body_mass_g", bins=20)
+plt.title("Distribution of penguin body mass")
+plt.show()''')
+
+md("### Distribution — `boxplot`: spread of a number across categories")
+code('''sns.boxplot(data=penguins, x="species", y="body_mass_g")
+plt.title("Body mass by species")
+plt.show()''')
+
+md("### Categorical — `countplot`: how many rows in each category?")
+code('''sns.countplot(data=titanic, x="class")
+plt.title("Number of passengers by class")
+plt.show()''')
+
+md("""> 🗣️ **Your turn (try it):** In the blank cell below, make a `barplot` of the
+> average **tip** by **day** from the `tips` data. (Hint: copy the bar example
+> from section 1 and change the columns.)""")
+code('''# Your turn — average tip by day:
+''')
+
+# ---------------- SEMANTIC MAPPINGS ----------------
+md("""---
+# 3. Semantic mappings — seaborn's superpower (~15 min)
+
+You can map a **column** to a **visual property**. This lets one plot show many
+variables at once. The key keywords:
+
+- `hue=`  → **color**
+- `size=` → **dot/line size**
+- `style=` → **marker shape**
+- `col=` / `row=` → split into **separate side-by-side plots** (small multiples)
+
+Watch what `hue="species"` does to our earlier scatter — the three species
+separate into clear clouds:""")
+code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="flipper_length_mm",
+                hue="species")
+plt.title("Penguin species separate cleanly by bill & flipper")
+plt.show()''')
+
+md("Layer in **two more variables** at once — `size` and `style`:")
+code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="flipper_length_mm",
+                hue="species", size="body_mass_g", style="sex")
+plt.title("Four variables in one figure")
+plt.legend(bbox_to_anchor=(1.02, 1), loc="upper left")
+plt.show()''')
+
+md("""**Small multiples** with `col=` (a figure-level function, `relplot`) splits
+the data into one panel per category — often clearer than cramming it together:""")
+code('''sns.relplot(data=penguins, x="bill_length_mm", y="flipper_length_mm",
+            hue="species", col="island")
+plt.show()''')
+
+md("""**`pairplot`** — instant overview: every numeric variable plotted against
+every other. Great first look at any new dataset.""")
+code('''sns.pairplot(penguins, hue="species")
+plt.show()''')
+
+# ---------------- MAIN HANDS-ON: GEMINI ----------------
+md("""---
+# 4. ★ Main hands-on: build visualizations with Gemini (~30 min)
+
+This is the core of the workshop. You don't have to memorize seaborn — describe
+what you want and let **Gemini (built into Colab)** write the code. Then you run,
+read, and improve it.
+
+### Where Gemini lives in Colab
+- Click **+ Generate** (or the Gemini ✨ icon) above a cell to describe a plot in
+  plain English and get a code cell back.
+- Select an existing code cell and ask Gemini to **improve / explain** it.
+- If a cell errors, click **"Explain error"** — Gemini tells you what went wrong.
 
 ### A good visualization prompt has four parts
-1. **Data shape** — columns, types, a sample (`df.head()` output).
-2. **Goal** — the question the figure should answer / the takeaway.
-3. **Constraints** — library, size, colorblind-safe, single figure, etc.
-4. **Library** — "use seaborn" / "use matplotlib only".
+1. **Dataset & columns** — name the DataFrame and the columns to use.
+2. **Goal** — the question / the takeaway.
+3. **Constraints** — "use seaborn", colorblind-safe, one figure, add a title.
+4. **Chart type** (optional) — if you already know it, say so.
 
-### Copy-paste prompt template
+### Copy this prompt into Gemini
 ```
-I have a pandas DataFrame `product_gender` with columns:
-  product (Phone/Laptop/Tablet), gender (Male/Female).
-Write Python (seaborn) to plot the COUNT of sales by product, split by gender,
-as grouped bars. Use a colorblind-safe palette, add a title and axis labels.
-Return only the code.
+Using the pandas DataFrame `penguins` (columns: species, island,
+bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex),
+use seaborn to plot body_mass_g for each species as a boxplot, colored
+by sex, with a colorblind-safe palette and a clear title. Return only code.
 ```""")
-md("**Your turn:** paste the AI's answer into the cell below and run it. Does it work on the first try? If it errors, paste the error back to the AI and ask it to fix it.")
-code('''# Paste AI-generated code here and run it.
-# (Reference solution — try the AI version first, then compare:)
-sns.countplot(data=product_gender, x="product", hue="gender",
-              order=["Phone", "Laptop", "Tablet"], palette="colorblind")
-plt.title("Number of sales by product type and gender")
-plt.ylabel("Number of sales"); plt.xlabel("Product")
-plt.show()''')
+md("**Paste Gemini's code below and run it.** Did it work first try? If it errors, use *Explain error* or paste the error back to Gemini.")
+code('''# Paste Gemini's generated code here, then run:
 
-md("""### Debugging exercise — AI hallucinations are real
-The cell below is the kind of code an AI sometimes produces: it *looks* right but
-uses a function that doesn't exist. Run it, read the error, then fix it (or ask
-the AI to). What's wrong?""")
-code('''# BROKEN ON PURPOSE — there is no sns.scatter(); the function is sns.scatterplot()
-# sns.scatter(data=students, x="income", y="test_score")   # <-- uncomment to see the error
+''')
+
+md("""### Exercise A — ask Gemini for a brand-new plot
+Pick one question and prompt Gemini for it (write your prompt, paste the code):
+- *"Average tip by day of week, split by lunch vs. dinner."* (`tips`)
+- *"Survival rate by passenger class."* (`titanic`)
+- *"Passengers per month across years as a heatmap."* (`flights`, needs a pivot)""")
+code('''# Your Gemini-built plot here:
+
+''')
+
+md("""### Exercise B — "make it better"
+Here's a working-but-ugly plot. Select it (or copy it into Gemini) and ask:
+> *"Make this chart presentation-ready: clean theme, colorblind-safe palette, a
+> title that states the takeaway, labeled axes with units, bigger fonts."*
+
+Then paste Gemini's improved version in the next cell and compare.""")
+code('''# BEFORE (works, but bland):
+sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g", hue="species")
+plt.show()''')
+code('''# AFTER — paste Gemini's improved version here:
+
+''')
+
+md("""### Exercise C — catch the hallucination
+AI sometimes invents functions that don't exist. The line below is the kind of
+thing it produces. Run it, read the error (try *Explain error*), then fix it.""")
+code('''# BROKEN ON PURPOSE — there is no sns.scatter(); it's sns.scatterplot()
+# sns.scatter(data=penguins, x="bill_length_mm", y="body_mass_g")  # uncomment to see error
 
 # Fix:
-sns.scatterplot(data=students, x="income", y="test_score")
-plt.title("Income vs. test score")
+sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g")
+plt.title("Bill length vs. body mass")
 plt.show()''')
 
-# ---------------- PART 3 ----------------
+# ---------------- POLISH + VERIFY ----------------
 md("""---
-# Part 3 — Hands-on: from rough draft to professional figure (~25 min)
+# 5. Polish, principles & verification (~15 min)
 
-A working plot is not the same as a *presentation-ready* plot. We'll iterate with
-the AI to polish one figure. Start from the rough version, then improve it.""")
-md("**Rough draft** — correct, but bland and hard to read at a glance:")
-code('''sns.scatterplot(data=students, x="income", y="test_score", hue="school_type")
-plt.show()''')
+A plot that *runs* is not the same as a plot that's *ready to present*. Five
+principles, each a small seaborn choice:
 
-md("""**Polish prompt to try with the AI:**
-```
-Improve this seaborn scatter of income vs. test_score colored by school_type:
-- clean theme, larger fonts, figure 8x5
-- colorblind-safe palette
-- a TITLE that states the takeaway (higher income & study hours -> higher scores)
-- axis labels with units ($000s), legend titled "School type"
-- size the points by hours_studied
-- export to PNG at 200 dpi with tight bounding box
-```""")
-code('''# Polished reference figure (compare with the AI's version):
-sns.set_theme(style="whitegrid", context="talk")
-fig, ax = plt.subplots(figsize=(8, 5))
-sns.scatterplot(data=students, x="income", y="test_score", hue="school_type",
-                size="hours_studied", sizes=(20, 200), palette="colorblind",
-                alpha=0.8, ax=ax)
-ax.set_title("Higher income and more study hours track higher test scores",
-             fontsize=14, weight="bold")
-ax.set_xlabel("Family income ($000s)")
-ax.set_ylabel("Test score")
-ax.legend(title="School type", bbox_to_anchor=(1.02, 1), loc="upper left")
-fig.savefig("income_vs_score.png", dpi=200, bbox_inches="tight")
+1. **Right chart** → pick the matching family (you did this in §2).
+2. **Reduce clutter** → `sns.set_theme(style="whitegrid")` (already on).
+3. **Color with intent** → `palette="colorblind"`; use `hue` for real categories.
+4. **Label to stand alone** → a *takeaway* title, axis labels **with units**.
+5. **Don't mislead** → honest axes and aggregation.
+
+Here's the same penguin scatter, polished and exported for slides:""")
+code('''fig, ax = plt.subplots(figsize=(8, 5))
+sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g",
+                hue="species", palette="colorblind", s=60, alpha=0.8, ax=ax)
+ax.set_title("Gentoo penguins are the largest by body mass", weight="bold")
+ax.set_xlabel("Bill length (mm)")
+ax.set_ylabel("Body mass (g)")
+ax.legend(title="Species")
+fig.savefig("penguins_polished.png", dpi=200, bbox_inches="tight")
 plt.show()
-print("Saved income_vs_score.png — drop this into your slides or report.")''')
-md("> 💡 Reset the theme with `sns.set_theme()` defaults if later plots look off, or restart and run Setup again.")
+print("Saved penguins_polished.png — drop it into your slides or report.")''')
 
-# ---------------- PART 4 ----------------
-md("""---
-# Part 4 — Pitfalls & a 30-second verification checklist (~10 min)
+md("""### ✅ Trust-this-figure checklist (before you believe any AI plot)
+- [ ] The code runs and uses **real** functions (no hallucinated `sns.scatter`).
+- [ ] The **chart type matches the question** (right family).
+- [ ] **Axes, units, and the title** are correct and honest.
+- [ ] The **numbers match the data** — spot-check one value.
+- [ ] A stranger could read it **without you explaining it**.
 
-AI writes plausible code fast — including plausible *mistakes*. Always check:
-
-| # | Failure mode | How to catch it |
-|---|--------------|-----------------|
-| 1 | **Hallucinated API** (`sns.scatter`, fake kwargs) | Run it; read the error; check the docs |
-| 2 | **Wrong chart type** (pie for trends, etc.) | Ask: does the encoding match the question? |
-| 3 | **Misleading scale** (truncated/dual axes) | Check that the axis starts where it should |
-| 4 | **Altered/dropped data** (silent filtering, wrong aggregation) | Compare row counts / totals before vs. after |
-
-### ✅ Trust-this-figure checklist
-- [ ] The code runs and uses real functions.
-- [ ] The chart type matches the question.
-- [ ] Axes, units, and the title are correct and honest.
-- [ ] The numbers match the source data (spot-check a value).
-- [ ] A stranger could read it without you explaining it.""")
-md("""### Quick exercise — verify the data wasn't altered
-Ask the AI for "average test score by school type," then verify its number yourself:""")
-code('''print(students.groupby("school_type")["test_score"].mean().round(1))
-# Does this match what the AI told you? Spot-check before trusting any figure.''')
+Quick verify — does the figure's story match the raw numbers?""")
+code('''print(penguins.groupby("species")["body_mass_g"].mean().round(0))''')
 
 md("""---
 ## Where to go from here
-- These skills carry into your later Python and ML courses (loss curves, confusion matrices, feature distributions).
-- See the `README.md` for a full resource list (Matplotlib, Seaborn, Data-to-Viz, ColorBrewer).
-- Keep a personal **prompt library** of the visualization prompts that worked for you.
+- These skills carry straight into your later Python & ML courses (loss curves,
+  confusion matrices, feature distributions — all seaborn).
+- See the `README.md` for a resource list (seaborn tutorial, Data-to-Viz,
+  ColorBrewer).
+- Keep a personal **prompt library** of the viz prompts that worked for you.
 
-🎉 **Nice work!** You drafted with AI, polished a figure, and learned to verify it.""")
+🎉 **Nice work!** You used seaborn for real plots, drove Gemini to draft and
+improve them, and learned to verify before you trust.""")
 
 nb["cells"] = cells
 nb["metadata"] = {
