@@ -5,21 +5,31 @@ nb = nbf.v4.new_notebook()
 cells = []
 def md(t): cells.append(nbf.v4.new_markdown_cell(t))
 def code(t): cells.append(nbf.v4.new_code_cell(t))
+def code_raises(t):
+    c = nbf.v4.new_code_cell(t)
+    c.metadata["tags"] = ["raises-exception"]  # expected to error (demo); keeps run going
+    cells.append(c)
 
-md("""# AI for Data Visualization Workshop
-**BDSY 2026 · Friday, June 26, 2026 · 10:45 AM – 12:15 PM**
+md("""# Using AI for Visualization
+**BDSY 2026 · Big Data Summer Immersion · Friday, June 26, 2026 · 10:45 AM – 12:15 PM · Room 106A**
 
-Welcome back! This is a hands-on **sequel to Python 1**. There you learned to
-write a little Python and make a basic `matplotlib` plot. Today we level up:
+Welcome to the last morning of Week 2. By now you've **written Python** (Intro to
+Python, Python I & II) and — just yesterday — built statistical graphics with
+**ggplot2**. Today we connect those two threads:
 
-- We'll use **seaborn**, the modern library that makes good-looking statistical
-  plots from a pandas DataFrame in *one line*.
-- We'll use the data that ships **inside seaborn** — no files to upload.
-- And we'll use **Gemini, built into Google Colab**, to draft plots from plain
-  English and to make rough plots better.
+- **seaborn is ggplot2's Python cousin.** Same instinct you used yesterday — hand
+  it a tidy DataFrame, *map columns to visual properties*, get good defaults out —
+  but it speaks pandas instead of R. (`aes(color=)` → `hue=`, `facet_wrap` → `col=`.)
+- We use the data that ships **inside seaborn** — no files to upload.
+- And we point an **AI coding assistant** at the plotting workflow. You already met
+  this loop in *Coding with Claude* — **describe → generate → run → read the error →
+  iterate**. Today's vehicle is **Gemini, built into Google Colab** (it's already in
+  the room), but the skill is the loop, not the brand.
 
-> **The rule for today: _AI drafts, you direct._** Gemini writes the code fast;
-> *you* decide whether the figure is clear, honest, and makes the point.
+> **The rule for today: _AI drafts, you direct._** The assistant writes the code
+> fast; *you* decide whether the figure is clear, honest, and makes the point. In
+> public health a misleading chart isn't just ugly — it misinforms. So the last
+> thing we practice is **verifying** what the AI hands you.
 
 Run the setup cell next.""")
 
@@ -46,15 +56,20 @@ penguins.head()''')
 
 # ---------------- WHY SEABORN ----------------
 md("""---
-# 1. Why seaborn? (~10 min)
+# 1. Why seaborn? (~8 min)
 
 Think of it this way: **matplotlib is the engine; seaborn is the smart layer on
 top.** Seaborn talks to pandas DataFrames directly, does the statistics for you,
-and looks good by default. It still *returns* matplotlib objects, so everything
-from Python 1 (`plt.title`, `figsize`, `plt.savefig`) still works.
+and looks good by default. It still *returns* matplotlib objects, so you can fine-
+tune anything with `plt.title`, `figsize`, `plt.savefig`.
+
+**Coming from ggplot2?** You'll feel at home. Yesterday you wrote
+`ggplot(df, aes(x, y, color=group)) + geom_point()`. In seaborn that's
+`sns.scatterplot(data=df, x=, y=, hue="group")` — same grammar-of-graphics idea
+(map columns to aesthetics), Python syntax.
 
 The "aha": this single line **groups by day, averages the bill, AND draws error
-bars** — work that took many lines in Python 1.""")
+bars** — the seaborn equivalent of a `stat_summary` layer, in one call.""")
 code('''sns.barplot(data=tips, x="day", y="total_bill")
 plt.title("Average bill by day")
 plt.show()''')
@@ -64,7 +79,7 @@ columns go on x and y — seaborn handles the rest.""")
 
 # ---------------- THREE FAMILIES ----------------
 md("""---
-# 2. The three families of plots (~20 min)
+# 2. The three families of plots (~22 min)
 
 Almost every seaborn plot belongs to one of three families, each answering a
 different kind of question:
@@ -110,15 +125,15 @@ code('''# Your turn — average tip by day:
 
 # ---------------- SEMANTIC MAPPINGS ----------------
 md("""---
-# 3. Semantic mappings — seaborn's superpower (~15 min)
+# 3. Semantic mappings — seaborn's superpower (~12 min)
 
-You can map a **column** to a **visual property**. This lets one plot show many
-variables at once. The key keywords:
+You can map a **column** to a **visual property** — exactly the `aes()` idea from
+ggplot2. This lets one plot show many variables at once. The key keywords:
 
-- `hue=`  → **color**
+- `hue=`  → **color** (ggplot2 `color=`/`fill=`)
 - `size=` → **dot/line size**
 - `style=` → **marker shape**
-- `col=` / `row=` → split into **separate side-by-side plots** (small multiples)
+- `col=` / `row=` → split into **separate side-by-side plots** (ggplot2 `facet_wrap`)
 
 Watch what `hue="species"` does to our earlier scatter — the three species
 separate into clear clouds:""")
@@ -127,15 +142,20 @@ code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="flipper_length_mm"
 plt.title("Penguin species separate cleanly by bill & flipper")
 plt.show()''')
 
-md("Layer in **two more variables** at once — `size` and `style`:")
+md("""> 👀 **Demo — watch, don't type.** The next three cells go fast; just follow
+> along. You can come back and run them yourself afterward.
+
+Layer in **two more variables** at once — `size` and `style`:""")
 code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="flipper_length_mm",
                 hue="species", size="body_mass_g", style="sex")
 plt.title("Four variables in one figure")
 plt.legend(bbox_to_anchor=(1.02, 1), loc="upper left")
 plt.show()''')
 
-md("""**Small multiples** with `col=` (a figure-level function, `relplot`) splits
-the data into one panel per category — often clearer than cramming it together:""")
+md("""**Small multiples** with `col=` splits the data into one panel per category —
+this is ggplot2's `facet_wrap`. Note `relplot` is a **figure-level** function: it
+makes its *own* figure, so you style it via the returned grid, not a trailing
+`plt.title()`. (Same goes for `pairplot` and `catplot`.)""")
 code('''sns.relplot(data=penguins, x="bill_length_mm", y="flipper_length_mm",
             hue="species", col="island")
 plt.show()''')
@@ -147,17 +167,25 @@ plt.show()''')
 
 # ---------------- MAIN HANDS-ON: GEMINI ----------------
 md("""---
-# 4. ★ Main hands-on: build visualizations with Gemini (~30 min)
+# 4. ★ Main hands-on: drive an AI coding assistant (~32 min)
 
-This is the core of the workshop. You don't have to memorize seaborn — describe
-what you want and let **Gemini (built into Colab)** write the code. Then you run,
-read, and improve it.
+This is the core of the workshop. You don't have to memorize seaborn — **describe
+what you want, let the assistant draft the code, then run, read, and improve it.**
+
+### The loop (you met it in *Coding with Claude*)
+**describe → generate → run → read the output/error → refine.** It's the same loop
+whether the assistant is Claude, Copilot, or Gemini — what makes *you* effective is
+a clear request and a critical eye on what comes back. Today we use **Gemini,
+because it's built right into Colab** and needs no separate account.
 
 ### Where Gemini lives in Colab
 - Click **+ Generate** (or the Gemini ✨ icon) above a cell to describe a plot in
   plain English and get a code cell back.
 - Select an existing code cell and ask Gemini to **improve / explain** it.
 - If a cell errors, click **"Explain error"** — Gemini tells you what went wrong.
+
+> **Don't see Gemini?** UI and access vary. No problem — every exercise below
+> includes a worked answer you can expand and use, so you're never stuck waiting.
 
 ### A good visualization prompt has four parts
 1. **Dataset & columns** — name the DataFrame and the columns to use.
@@ -177,6 +205,14 @@ code('''# Paste Gemini's generated code here, then run:
 
 ''')
 
+md("> 👉 **Stuck / no Gemini?** Expand-and-run this worked answer (try the prompt first):")
+code('''# Worked answer for the boxplot prompt above:
+sns.boxplot(data=penguins, x="species", y="body_mass_g", hue="sex",
+            palette="colorblind")
+plt.title("Body mass by species and sex")
+plt.xlabel("Species"); plt.ylabel("Body mass (g)")
+plt.show()''')
+
 md("""### Exercise A — ask Gemini for a brand-new plot
 Pick one question and prompt Gemini for it (write your prompt, paste the code):
 - *"Average tip by day of week, split by lunch vs. dinner."* (`tips`)
@@ -185,6 +221,13 @@ Pick one question and prompt Gemini for it (write your prompt, paste the code):
 code('''# Your Gemini-built plot here:
 
 ''')
+
+md("> 👉 **Stuck / no Gemini?** A worked answer for the survival-rate option:")
+code('''# Survival rate by passenger class (titanic):
+sns.barplot(data=titanic, x="class", y="survived", palette="colorblind")
+plt.title("First-class passengers survived at the highest rate")
+plt.xlabel("Passenger class"); plt.ylabel("Survival rate")
+plt.show()''')
 
 md("""### Exercise B — "make it better"
 Here's a working-but-ugly plot. Select it (or copy it into Gemini) and ask:
@@ -199,20 +242,38 @@ code('''# AFTER — paste Gemini's improved version here:
 
 ''')
 
-md("""### Exercise C — catch the hallucination
-AI sometimes invents functions that don't exist. The line below is the kind of
-thing it produces. Run it, read the error (try *Explain error*), then fix it.""")
-code('''# BROKEN ON PURPOSE — there is no sns.scatter(); it's sns.scatterplot()
-# sns.scatter(data=penguins, x="bill_length_mm", y="body_mass_g")  # uncomment to see error
+md("> 👉 **Stuck / no Gemini?** One presentation-ready version of the plot above:")
+code('''fig, ax = plt.subplots(figsize=(8, 5))
+sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g",
+                hue="species", palette="colorblind", s=70, alpha=0.8, ax=ax)
+ax.set_title("Bigger bills track with heavier penguins", weight="bold")
+ax.set_xlabel("Bill length (mm)"); ax.set_ylabel("Body mass (g)")
+ax.legend(title="Species")
+plt.show()''')
 
-# Fix:
-sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g")
+md("""### Exercise C — catch the hallucination
+AI confidently invents functions that don't exist. The cell below is the kind of
+thing it produces — **`sns.scatter()` is not a real function.** This is *your*
+job, not the AI's: run it as-is, read the error (try *Explain error*), and **fix
+it in the next cell.** This "does the output match reality?" check is the whole
+point of today — a chart that *runs* can still be wrong or misleading.""")
+code_raises('''# RUN THIS — it will error on purpose:
+sns.scatter(data=penguins, x="bill_length_mm", y="body_mass_g")
 plt.title("Bill length vs. body mass")
+plt.show()''')
+md("**Your fix below** — correct the function name (and add honest labels):")
+code('''# Fix the broken call above:
+
+''')
+md("> 👉 Worked answer:")
+code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g")
+plt.title("Bill length vs. body mass")
+plt.xlabel("Bill length (mm)"); plt.ylabel("Body mass (g)")
 plt.show()''')
 
 # ---------------- POLISH + VERIFY ----------------
 md("""---
-# 5. Polish, principles & verification (~15 min)
+# 5. Polish, principles & verification (~13 min)
 
 A plot that *runs* is not the same as a plot that's *ready to present*. Five
 principles, each a small seaborn choice:

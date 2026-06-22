@@ -8,6 +8,7 @@ __pycache__/
 income_vs_score.png
 
 # AI assistant tooling / config
+context/
 .claude/
 .claude*
 CLAUDE.md
