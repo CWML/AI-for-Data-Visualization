@@ -23,8 +23,9 @@ Python, Python I & II) and — just yesterday — built statistical graphics wit
 - We use the data that ships **inside seaborn** — no files to upload.
 - And we point an **AI coding assistant** at the plotting workflow. You already met
   this loop in *Coding with Claude* — **describe → generate → run → read the error →
-  iterate**. Today's vehicle is **Gemini, built into Google Colab** (it's already in
-  the room), but the skill is the loop, not the brand.
+  iterate**. **Use whatever AI you already have** — ChatGPT, Claude, Copilot — or
+  **Gemini, built right into Google Colab** (nothing to install, it's already in the
+  room). The skill is the loop, not the brand.
 
 > **The rule for today: _AI drafts, you direct._** The assistant writes the code
 > fast; *you* decide whether the figure is clear, honest, and makes the point. In
@@ -174,18 +175,26 @@ what you want, let the assistant draft the code, then run, read, and improve it.
 
 ### The loop (you met it in *Coding with Claude*)
 **describe → generate → run → read the output/error → refine.** It's the same loop
-whether the assistant is Claude, Copilot, or Gemini — what makes *you* effective is
-a clear request and a critical eye on what comes back. Today we use **Gemini,
-because it's built right into Colab** and needs no separate account.
+whether the assistant is Claude, ChatGPT, Copilot, or Gemini — what makes *you*
+effective is a clear request and a critical eye on what comes back.
 
-### Where Gemini lives in Colab
+> **Use whatever AI you already have.** Got ChatGPT or Claude open in a browser
+> tab? Use that — paste the prompt, copy the code back into a cell. No account
+> handy? **Gemini is built right into Colab** (no separate login). Pick one and go;
+> the prompts below work the same in any of them.
+
+### Using Gemini inside Colab (one convenient option)
 - Click **+ Generate** (or the Gemini ✨ icon) above a cell to describe a plot in
   plain English and get a code cell back.
 - Select an existing code cell and ask Gemini to **improve / explain** it.
 - If a cell errors, click **"Explain error"** — Gemini tells you what went wrong.
 
-> **Don't see Gemini?** UI and access vary. No problem — every exercise below
-> includes a worked answer you can expand and use, so you're never stuck waiting.
+*Using ChatGPT/Claude in a browser tab instead?* Same idea — paste the prompt,
+copy the code into a cell, and paste any error back to ask for a fix.
+
+> **Don't see Gemini and don't have another AI handy?** No problem — every
+> exercise below includes a worked answer you can expand and run, so you're never
+> stuck waiting.
 
 ### A good visualization prompt has four parts
 1. **Dataset & columns** — name the DataFrame and the columns to use.
@@ -193,19 +202,19 @@ because it's built right into Colab** and needs no separate account.
 3. **Constraints** — "use seaborn", colorblind-safe, one figure, add a title.
 4. **Chart type** (optional) — if you already know it, say so.
 
-### Copy this prompt into Gemini
+### Copy this prompt into your AI
 ```
 Using the pandas DataFrame `penguins` (columns: species, island,
 bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex),
 use seaborn to plot body_mass_g for each species as a boxplot, colored
 by sex, with a colorblind-safe palette and a clear title. Return only code.
 ```""")
-md("**Paste Gemini's code below and run it.** Did it work first try? If it errors, use *Explain error* or paste the error back to Gemini.")
-code('''# Paste Gemini's generated code here, then run:
+md("**Paste the AI's code below and run it.** Did it work first try? If it errors, use *Explain error* (or paste the error back to your AI) and try again.")
+code('''# Paste the AI's generated code here, then run:
 
 ''')
 
-md("> 👉 **Stuck / no Gemini?** Expand-and-run this worked answer (try the prompt first):")
+md("> 👉 **Stuck / no AI?** Expand-and-run this worked answer (try the prompt first):")
 code('''# Worked answer for the boxplot prompt above:
 sns.boxplot(data=penguins, x="species", y="body_mass_g", hue="sex",
             palette="colorblind")
@@ -213,16 +222,18 @@ plt.title("Body mass by species and sex")
 plt.xlabel("Species"); plt.ylabel("Body mass (g)")
 plt.show()''')
 
-md("""### Exercise A — ask Gemini for a brand-new plot
-Pick one question and prompt Gemini for it (write your prompt, paste the code):
+md("""### Exercise A — ask the AI for a brand-new plot
+Pick one question, turn it into a 4-part prompt, and paste the code it gives back:
 - *"Average tip by day of week, split by lunch vs. dinner."* (`tips`)
 - *"Survival rate by passenger class."* (`titanic`)
-- *"Passengers per month across years as a heatmap."* (`flights`, needs a pivot)""")
-code('''# Your Gemini-built plot here:
+- *"Passengers per month across years as a heatmap."* (`flights`, needs a pivot)
+- *"How tip relates to total bill, colored by whether the party smoked."* (`tips`)
+- *"Distribution of penguin body mass for each species, as overlapping curves."* (`penguins`)""")
+code('''# Your AI-built plot here:
 
 ''')
 
-md("> 👉 **Stuck / no Gemini?** A worked answer for the survival-rate option:")
+md("> 👉 **Stuck / no AI?** A worked answer for the survival-rate option:")
 code('''# Survival rate by passenger class (titanic):
 sns.barplot(data=titanic, x="class", y="survived", palette="colorblind")
 plt.title("First-class passengers survived at the highest rate")
@@ -230,19 +241,19 @@ plt.xlabel("Passenger class"); plt.ylabel("Survival rate")
 plt.show()''')
 
 md("""### Exercise B — "make it better"
-Here's a working-but-ugly plot. Select it (or copy it into Gemini) and ask:
+Here's a working-but-ugly plot. Select it in Colab (or copy it into your AI) and ask:
 > *"Make this chart presentation-ready: clean theme, colorblind-safe palette, a
 > title that states the takeaway, labeled axes with units, bigger fonts."*
 
-Then paste Gemini's improved version in the next cell and compare.""")
+Then paste the improved version in the next cell and compare.""")
 code('''# BEFORE (works, but bland):
 sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g", hue="species")
 plt.show()''')
-code('''# AFTER — paste Gemini's improved version here:
+code('''# AFTER — paste the AI's improved version here:
 
 ''')
 
-md("> 👉 **Stuck / no Gemini?** One presentation-ready version of the plot above:")
+md("> 👉 **Stuck / no AI?** One presentation-ready version of the plot above:")
 code('''fig, ax = plt.subplots(figsize=(8, 5))
 sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g",
                 hue="species", palette="colorblind", s=70, alpha=0.8, ax=ax)
@@ -251,23 +262,52 @@ ax.set_xlabel("Bill length (mm)"); ax.set_ylabel("Body mass (g)")
 ax.legend(title="Species")
 plt.show()''')
 
-md("""### Exercise C — catch the hallucination
-AI confidently invents functions that don't exist. The cell below is the kind of
-thing it produces — **`sns.scatter()` is not a real function.** This is *your*
-job, not the AI's: run it as-is, read the error (try *Explain error*), and **fix
-it in the next cell.** This "does the output match reality?" check is the whole
-point of today — a chart that *runs* can still be wrong or misleading.""")
-code_raises('''# RUN THIS — it will error on purpose:
-sns.scatter(data=penguins, x="bill_length_mm", y="body_mass_g")
+md("""### Exercise C — make the AI go *further* (stretch)
+So far the AI has *drafted* and *prettied up* plots. It can also help you find the
+*right* chart and add insight you'd otherwise hand-code. If you have time, try one:
+
+- **AI as advisor:** *"I want to show how penguin body mass differs across the three
+  species. What chart type best shows this, and why? Then give me the seaborn code."*
+- **Add a trend line:** *"Add a regression/trend line to a seaborn scatter of
+  bill_length_mm vs. body_mass_g in the `penguins` data."*
+- **Annotate the takeaway:** *"Make a seaborn barplot of survival rate by class
+  (`titanic`) and print the value on top of each bar."*
+
+Notice the AI isn't just typing for you — it's helping you *decide* and *add
+meaning*. You still judge whether its advice is right.""")
+code('''# Your "go further" plot here:
+
+''')
+md("> 👉 **Stuck / no AI?** A worked answer for the *annotate the takeaway* option:")
+code('''ax = sns.barplot(data=titanic, x="class", y="survived", palette="colorblind")
+ax.bar_label(ax.containers[0], fmt="%.2f")          # value on top of each bar
+ax.set_title("First-class passengers survived at the highest rate")
+ax.set_xlabel("Passenger class"); ax.set_ylabel("Survival rate")
+plt.show()''')
+
+md("""### Exercise D — catch the hallucination
+AI doesn't usually fail with obvious gibberish. The dangerous failures are
+**plausible** — it borrows a feature from a *different* library and writes code
+that looks completely reasonable. The cell below is exactly that: the AI tried to
+add a trend line with `trendline="ols"` — that's a **Plotly** argument; seaborn's
+`scatterplot` has no such option, so it errors.
+
+Your job, not the AI's: run it as-is, read the error (try *Explain error*), and
+**fix it in the next cell** — the *real* seaborn way to get a trend line is
+`sns.regplot`. (Worth knowing: an even sneakier hallucination is code that *runs*
+but quietly plots the wrong thing — that's why §5 is all about verifying.)""")
+code_raises('''# RUN THIS — it will error on purpose (trendline= is not a seaborn argument):
+sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g", trendline="ols")
 plt.title("Bill length vs. body mass")
 plt.show()''')
-md("**Your fix below** — correct the function name (and add honest labels):")
+md("**Your fix below** — get a real trend line with `sns.regplot`, and add honest labels:")
 code('''# Fix the broken call above:
 
 ''')
 md("> 👉 Worked answer:")
-code('''sns.scatterplot(data=penguins, x="bill_length_mm", y="body_mass_g")
-plt.title("Bill length vs. body mass")
+code('''sns.regplot(data=penguins, x="bill_length_mm", y="body_mass_g",
+            scatter_kws={"alpha": 0.6})
+plt.title("Heavier penguins tend to have longer bills")
 plt.xlabel("Bill length (mm)"); plt.ylabel("Body mass (g)")
 plt.show()''')
 
@@ -297,7 +337,8 @@ plt.show()
 print("Saved penguins_polished.png — drop it into your slides or report.")''')
 
 md("""### ✅ Trust-this-figure checklist (before you believe any AI plot)
-- [ ] The code runs and uses **real** functions (no hallucinated `sns.scatter`).
+- [ ] The code runs and uses **real** seaborn functions/arguments (no `trendline=`
+      borrowed from another library).
 - [ ] The **chart type matches the question** (right family).
 - [ ] **Axes, units, and the title** are correct and honest.
 - [ ] The **numbers match the data** — spot-check one value.
@@ -314,7 +355,7 @@ md("""---
   ColorBrewer).
 - Keep a personal **prompt library** of the viz prompts that worked for you.
 
-🎉 **Nice work!** You used seaborn for real plots, drove Gemini to draft and
+🎉 **Nice work!** You used seaborn for real plots, drove an AI assistant to draft and
 improve them, and learned to verify before you trust.""")
 
 nb["cells"] = cells
