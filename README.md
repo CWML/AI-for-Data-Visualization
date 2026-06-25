@@ -25,10 +25,6 @@ The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` jupyter 
 
 All workshop data comes from seaborn's built-in datasets via `sns.load_dataset(...)` — **penguins** (the main one), **tips**, **flights**, and **titanic**. Nothing to download or upload.
 
-### Bonus reference material
-
-The `examples/art-of-dataviz-course/` folder contains extra plots and write-ups adapted from the *Art of Data Visualization* course. They aren't used in the live session but are kept as additional examples of interpreting visualizations.
-
 ### Where to go from here (after class)
 
 These skills carry directly into later Python and machine-learning courses, where clear figures (loss curves, confusion matrices, feature distributions) matter just as much.
@@ -52,12 +48,3 @@ Additional sources used in building this material:
 - DataCamp — Python Seaborn Cheat Sheet: https://www.datacamp.com/cheat-sheet/python-seaborn-cheat-sheet
 - Simplilearn — A Complete Guide to Data Visualization in Python: https://www.simplilearn.com/tutorials/python-tutorial/data-visualization-in-python
 - TutorialsPoint — Seaborn tutorial (PDF): https://www.tutorialspoint.com/seaborn/seaborn_tutorial.pdf
-
-### Prerequisite
-
-- Python 1 for Data Analysis: https://github.com/CWML/Python1
-
-### General Python & visualization resources
-- Python PEP8 style guide: https://peps.python.org/pep-0008/
-- Python cheatsheet: https://www.pythoncheatsheet.org/
-- See more helpful learning resources (under Python): https://library.medicine.yale.edu/research-data/learn-work-data
