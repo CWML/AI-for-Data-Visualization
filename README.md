@@ -25,9 +25,9 @@ The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` jupyter 
 
 All three notebooks are generated from a single source (`build_notebook.py`) — run `python build_notebook.py` to regenerate them so they never drift:
 
-- **`ai_dataviz_2026_workshop.ipynb`** — complete notebook with full code and worked answers (the Colab badge above, best for self-study).
-- **`ai_dataviz_2026_instructor.ipynb`** — full code plus an inline teaching script (timing cues, what to say, what to click in Colab). For the instructor's private screen.
-- **`ai_dataviz_2026_student.ipynb`** — blank code cells to fill in live, trimmed prose, no solutions. The participant worksheet to project / share.
+- **`ai_dataviz_2026_workshop.ipynb`** — complete notebook with full code and worked answers (best for self-study). [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_workshop.ipynb)
+- **`ai_dataviz_2026_instructor.ipynb`** — full code plus an inline teaching script (timing cues, what to say, what to click in Colab). For the instructor's private screen. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_instructor.ipynb)
+- **`ai_dataviz_2026_student.ipynb`** — blank code cells to fill in live, trimmed prose, no solutions. The participant worksheet to project / share. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_student.ipynb)
 
 A short (~5 min) opener deck lives in `slides/ai-for-dataviz-intro.md` (Marp markdown — see the comment at the top of the file for how to render it to PDF/PPTX/HTML).
 
