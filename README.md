@@ -47,14 +47,14 @@ These skills carry directly into later Python and machine-learning courses, wher
 - ColorBrewer (colorblind-safe palettes): https://colorbrewer2.org/
 - Gemini in Colab (data science help): https://colab.research.google.com/
 
-### Seaborn & visualization references
+### Seaborn & visualization resources
 
-Additional sources used in building this material:
+Additional resources used in building this material:
 
-- Seaborn. (2024). *An Introduction to Seaborn.* Retrieved January 2025, from https://seaborn.pydata.org/tutorial/introduction.html
-- Ritza Articles. (n.d.). *Matplotlib vs. seaborn vs. Plotly vs. MATLAB vs. ggplot2 vs. pandas.* Retrieved January 2025, from https://ritza.co/articles/matplotlib-vs-seaborn-vs-plotly-vs-MATLAB-vs-ggplot2-vs-pandas/
-- Seaborn. (2024). *Example gallery.* Retrieved January 2025, from https://seaborn.pydata.org/examples/index.html
-- W3Schools. (n.d.). *Seaborn.* Retrieved January 2025, from https://www.w3schools.com/python/numpy/numpy_random_seaborn.asp
-- Datacamp. (2021). *Python Seaborn Cheat Sheet.* Retrieved January 2025, from https://www.datacamp.com/cheat-sheet/python-seaborn-cheat-sheet
-- Simplilearn. (2024). *A Complete Guide to Data Visualization in Python With Libraries & More.* Retrieved January 2025, from https://www.simplilearn.com/tutorials/python-tutorial/data-visualization-in-python
-- TutorialsPoint. (n.d.). *Seaborn tutorial.* Retrieved from https://www.tutorialspoint.com/seaborn/seaborn_tutorial.pdf
+- Seaborn — *An Introduction to Seaborn*: https://seaborn.pydata.org/tutorial/introduction.html
+- Ritza Articles — *Matplotlib vs. seaborn vs. Plotly vs. MATLAB vs. ggplot2 vs. pandas*: https://ritza.co/articles/matplotlib-vs-seaborn-vs-plotly-vs-MATLAB-vs-ggplot2-vs-pandas/
+- Seaborn — *Example gallery*: https://seaborn.pydata.org/examples/index.html
+- W3Schools — *Seaborn*: https://www.w3schools.com/python/numpy/numpy_random_seaborn.asp
+- Datacamp — *Python Seaborn Cheat Sheet*: https://www.datacamp.com/cheat-sheet/python-seaborn-cheat-sheet
+- Simplilearn — *A Complete Guide to Data Visualization in Python With Libraries & More*: https://www.simplilearn.com/tutorials/python-tutorial/data-visualization-in-python
+- TutorialsPoint — *Seaborn tutorial*: https://www.tutorialspoint.com/seaborn/seaborn_tutorial.pdf
