@@ -1,3 +1,5 @@
+# https://github.com/j-demayo/AI-for-Data-Visualization
+
 ## Using AI for Visualization
 
 A hands-on BDSY session that connects two threads you've already worked with this program: **Python** (Intro to Python, Python I & II) and **statistical graphics with ggplot2**. Here you meet **seaborn** — ggplot2's Python cousin — the library that turns a pandas DataFrame into a good-looking statistical figure in one line, and you use **Gemini (built into Google Colab)** as an **AI coding agent**: describe the plot you want in plain English, generate it, run it, read the errors, and iterate. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
