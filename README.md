@@ -1,4 +1,4 @@
-# https://github.com/j-demayo/AI-for-Data-Visualization
+# https://github.com/CWML/AI-for-Data-Visualization
 
 ## Using AI for Visualization
 
