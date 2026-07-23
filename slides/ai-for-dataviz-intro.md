@@ -1,7 +1,7 @@
 ---
 marp: true
 title: Using AI for Visualization — Intro
-description: 5-minute opener for the BDSY 2026 "Using AI for Visualization" session
+description: 5-minute opener for the Yale Medical Library "Using AI for Visualization" workshop
 paginate: true
 theme: default
 ---
@@ -20,25 +20,24 @@ HOW TO USE THIS DECK
 
 # Using AI for Visualization
 
-### Big Data Summer Immersion · BDSY 2026
+### Yale Medical Library · 2-Hour Hands-On Workshop
 
-**Friday, June 26 · 10:45 AM · Room 106A**
-
-*Last morning of Week 2 — we tie your Python + ggplot2 week together*
+*Use AI to draft charts. Use your judgment to direct and verify them.*
 
 <!--
-Open warm. One-liner: "You've written Python all week; yesterday you made charts in
-ggplot2. Today: charts in Python — with an AI doing the typing and YOU doing the
-thinking." Show of hands: who was in ggplot2 yesterday? Who used AI in 'Coding with
-Claude'? Anchor to both — we build on them, we don't start from scratch.
+Open warm. One-liner: "Today you'll use seaborn — Python's statistical graphics
+library — and an AI coding assistant to build charts fast. The AI does the typing;
+you do the thinking." Quick show of hands: who has used any plotting library before,
+in any language? Who has used an AI coding assistant? Anchor to both — we build on
+what they know. If someone raises their hand for R or ggplot2, that's a great
+segue: seaborn uses the same grammar-of-graphics idea.
 -->
 
 ---
 
 # Why this matters (it's not just pretty pictures)
 
-- A chart is how data **makes an argument** — in public health, to clinicians,
-  funders, the public.
+- A chart is how data **makes an argument** — to colleagues, reviewers, funders, the public.
 - A **misleading** chart doesn't just look bad — it **misinforms**.
 - AI can now draft a chart in seconds. That makes **your judgment** the scarce
   skill, not the typing.
@@ -54,27 +53,28 @@ today serves this rule.
 
 ---
 
-# seaborn = ggplot2's Python cousin
+# The seaborn grammar: map columns to visual properties
 
-You already know the idea: **map data columns to visual properties.**
+The underlying idea: **hand a DataFrame column to a visual property, and the chart builds itself.**
 
-| ggplot2 (yesterday) | seaborn (today) |
+| What you want | seaborn keyword |
 |---|---|
-| `ggplot(df, aes(x, y, color=g))` | `sns.scatterplot(data=df, x=, y=, hue="g")` |
-| `color = ` / `fill = ` | `hue=` |
-| `facet_wrap(~group)` | `col="group"` |
-| `geom_point()` / `geom_bar()` | `scatterplot()` / `barplot()` |
+| color by a column | `hue="column"` |
+| size dots by a column | `size="column"` |
+| split into side-by-side panels | `col="column"` |
+| x / y position | `x=` / `y=` |
 
-Same grammar of graphics. Python syntax. Good defaults out of the box.
+Same logic applies in any grammar-of-graphics library (R's ggplot2 uses `aes(color=)` and `facet_wrap` for the same ideas). If you've seen it before, it'll feel familiar. If not, you'll have it in 10 minutes.
 
 <!--
-Reassure the R crowd: "you are not starting over." Don't teach seaborn here — that's
-the notebook. Just land that the mental model transfers 1:1. ~40s.
+Don't teach seaborn here — that's the notebook. Just land the mental model: you
+name the DataFrame and the column, seaborn handles the rest. For anyone who's used
+ggplot2: the concepts transfer 1:1, just different syntax. ~40s.
 -->
 
 ---
 
-# The loop you already met in *Coding with Claude*
+# The loop
 
 ## describe → generate → run → **read** → refine
 
@@ -145,5 +145,5 @@ Before you believe **any** AI-generated plot:
 <!--
 Don't dwell on this at the open — flash it (~20s) so they know where we're headed.
 Bring it BACK at the very end of the session as the closing slide / takeaway. That
-bookends the whole 90 minutes on the one rule.
+bookends the whole 2 hours on the one rule.
 -->

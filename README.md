@@ -2,30 +2,27 @@
 
 ## Using AI for Visualization
 
-A hands-on BDSY session that connects two threads you've already worked with this program: **Python** (Intro to Python, Python I & II) and **statistical graphics with ggplot2**. Here you meet **seaborn** — ggplot2's Python cousin — the library that turns a pandas DataFrame into a good-looking statistical figure in one line, and you use **Gemini (built into Google Colab)** as an **AI coding agent**: describe the plot you want in plain English, generate it, run it, read the errors, and iterate. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
+A hands-on 2-hour workshop from the **Yale Medical Library** introducing **seaborn** — Python's most approachable statistical graphics library — alongside an **AI coding assistant** workflow. Participants learn just enough seaborn to direct and verify an AI (Gemini in Colab, ChatGPT, Claude, or any tool they already use) as it drafts charts. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
 
-> Coming from yesterday's ggplot2 session? You'll feel at home. `ggplot(df, aes(x, y, color=group)) + geom_point()` becomes `sns.scatterplot(data=df, x=, y=, hue="group")` — same grammar-of-graphics idea (map columns to aesthetics), Python syntax.
-
-### In this 90-minute in-person session, you'll learn how to:
+### In this 2-hour in-person session, you'll learn how to:
 
 - Use **seaborn** for the three families of plots — relational (`scatterplot`, `lineplot`), distribution (`histplot`, `boxplot`), and categorical (`barplot`, `countplot`)
-- Layer multiple variables into one figure with **semantic mappings** (`hue`, `size`, `style`, `col`), the seaborn equivalent of ggplot2 aesthetics and facets
+- Layer multiple variables into one figure with **semantic mappings** (`hue`, `size`, `style`, `col`) — seaborn's grammar-of-graphics approach to mapping data columns to visual properties
 - Apply five core visualization principles (chart choice, reducing clutter, intentional color, labeling, avoiding misleading charts)
-- Work with an **AI coding agent** (Gemini in Colab) using the describe → generate → run → read-the-error → iterate loop — building on the "Coding with Claude" session earlier in the program
+- Work with an **AI coding agent** (Gemini in Colab) using the describe → generate → run → read-the-error → iterate loop
 - Write effective visualization prompts (dataset & columns → goal → constraints → chart type)
 - Recognize and catch the common failure modes of AI-generated charts (hallucinated functions, wrong chart types, misleading scales, altered data)
+- Apply the full workflow to **your own data or research question** in the open-work section
 
 ### What to know about this session:
 
-This training is hands-on; come ready to code alongside the instructor. It builds on the Python and ggplot2 work you've already done this program — you should be comfortable with basic Python and the grammar-of-graphics idea of mapping data columns to visual properties. We use **Google Colab** (which has Gemini built in — no separate AI account or API key needed). Details about technical setup will be emailed to registrants a few days before the course begins. Please note that registration is required for this event.
+This training is hands-on; come ready to code alongside the instructor. No prior plotting experience is required — if you're comfortable with basic Python and familiar with pandas DataFrames, you're ready. We use **Google Colab** (which has Gemini built in — no separate AI account or API key needed). Details about technical setup will be emailed to registrants a few days before the course begins. Please note that registration is required for this event.
 
-The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` jupyter notebook file. This file can be viewed in GitHub or your preferred jupyter notebook environment. [colab.research.google.com](https://colab.research.google.com) is utilized in the class.
+The hands-on portion is located in the `ai_dataviz_2026_workshop.ipynb` Jupyter notebook file. This file can be viewed in GitHub or your preferred Jupyter notebook environment. [colab.research.google.com](https://colab.research.google.com) is utilized in the class.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_workshop.ipynb)
 
 ### Notebook variants & slides
-
-All three notebooks are generated from a single source (`build_notebook.py`) — run `python build_notebook.py` to regenerate them so they never drift:
 
 - **`ai_dataviz_2026_workshop.ipynb`** — complete notebook with full code and worked answers (best for self-study). [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_workshop.ipynb)
 - **`ai_dataviz_2026_instructor.ipynb`** — full code plus an inline teaching script (timing cues, what to say, what to click in Colab). For the instructor's private screen. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/j-demayo/AI-for-Data-Visualization/blob/main/ai_dataviz_2026_instructor.ipynb)
@@ -33,13 +30,25 @@ All three notebooks are generated from a single source (`build_notebook.py`) —
 
 A short (~5 min) opener deck lives in `slides/ai-for-dataviz-intro.md` (Marp markdown — see the comment at the top of the file for how to render it to PDF/PPTX/HTML).
 
+### Session timeline
+
+| Section | Content | Time |
+|---|---|---|
+| Slides + intro | Framing, the one rule, the loop | ~5 min |
+| Setup | Run setup cell, explore datasets | ~2 min |
+| §1 Why seaborn? | matplotlib vs. seaborn, barplot demo | ~8 min |
+| §2 Three families | Relational / distribution / categorical, hands-on | ~22 min |
+| §3 Semantic mappings | hue, size, style, col — small multiples | ~12 min |
+| §4 AI hands-on | Prompt, paste, run, debug, iterate (4 exercises) | ~32 min |
+| §5 Polish & verify | 5 principles, trust-this-figure checklist | ~15 min |
+| §6 Bring your own | Open work time — your data or your question | ~25 min |
+| **Total** | | **~2 hours** |
+
 ### Data
 
 All workshop data comes from seaborn's built-in datasets via `sns.load_dataset(...)` — **penguins** (the main one), **tips**, **flights**, and **titanic**. Nothing to download or upload.
 
 ### Where to go from here (after class)
-
-These skills carry directly into later Python and machine-learning courses, where clear figures (loss curves, confusion matrices, feature distributions) matter just as much.
 
 - Seaborn tutorial: https://seaborn.pydata.org/tutorial.html
 - Seaborn example gallery: https://seaborn.pydata.org/examples/index.html
