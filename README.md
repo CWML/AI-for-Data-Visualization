@@ -2,7 +2,7 @@
 
 ## Using AI for Visualization
 
-A hands-on 2-hour workshop from the **Yale Medical Library** introducing **seaborn** — Python's most approachable statistical graphics library — alongside an **AI coding assistant** workflow. Participants learn just enough seaborn to direct and verify an AI (Gemini in Colab, ChatGPT, Claude, or any tool they already use) as it drafts charts. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
+A hands-on 2-hour workshop from introducing **seaborn** — Python's most approachable statistical graphics library — alongside an **AI coding assistant** workflow. Participants learn just enough seaborn to direct and verify an AI (Gemini in Colab, ChatGPT, Claude, or any tool they already use) as it drafts charts. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
 
 ### In this 2-hour in-person session, you'll learn how to:
 
