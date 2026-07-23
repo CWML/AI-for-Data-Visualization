@@ -1,6 +1,6 @@
 # https://github.com/CWML/AI-for-Data-Visualization
 
-## Using AI for Data Visualization w/ Python
+## Using AI & Python for Data Visualization
 
 A hands-on 2-hour workshop from introducing **seaborn** — Python's most approachable statistical graphics library — alongside an **AI coding assistant** workflow. Participants learn just enough seaborn to direct and verify an AI (Gemini in Colab, ChatGPT, Claude, or any tool they already use) as it drafts charts. All examples use the clean datasets that ship inside seaborn (penguins, tips, flights, titanic), so there are no files to upload.
 
